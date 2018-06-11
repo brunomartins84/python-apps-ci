@@ -1,5 +1,5 @@
 # pythonapps-ci
-Continuous Integration using Jenkins to build Python applications running in GKE
+# Continuous Integration using Jenkins to build Python applications running in GKE
 
 # 1) Execute Shell
 
@@ -29,15 +29,21 @@ export KUBECONFIG=$FULL_PATH/$PROJECT_ID-kubeconfig
 cd yourproject
 
 ## Gcloud authentication & Docker Build API
+```
 gcloud config set project yourproject
 gcloud auth activate-service-account docker@${PROJECT_ID}.iam.gserviceaccount.com --key-file=$FULL_PATH/$PROJECT_ID-cloudbuild.json
 docker build -t us.gcr.io/yourproject/yourapplication:latest -t us.gcr.io/yourproject/yourapplication:$BUILD_NUMBER -f deploy/dockerfiles/Dockerfile.yourapplication.prod .
 gcloud docker -- push us.gcr.io/yourproject/yourapplication:latest
 gcloud docker -- push us.gcr.io/yourproject/yourapplication:$BUILD_NUMBER
 gcloud container clusters get-credentials $GCLOUD_CLUSTER_NAME --zone=yourzone
+```
 
 ## Chart local variables
+```
 export CHART_FULLNAME=${CHART_NAME}-${CHART_VERSION}
 export CHART_FILENAME=$FULL_PATH/${CHART_FULLNAME}.tgz
 export HELM_NAME=$(helm ls | grep $CHART_FULLNAME | awk '{print $1}')
 /usr/local/bin/helm upgrade $HELM_NAME $CHART_FILENAME --set image.tag=$BUILD_NUMBER
+```
+
+brunomartins84[at]yahoo[dot]com[dot]br
